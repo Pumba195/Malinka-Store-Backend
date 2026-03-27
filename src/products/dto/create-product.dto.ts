@@ -1,4 +1,14 @@
-import { IsString, IsNumber, Min, IsUrl, IsNotEmpty, MinLength } from 'class-validator';
+import { 
+  IsString, 
+  IsNumber, 
+  Min, 
+  Max, 
+  IsUrl, 
+  IsNotEmpty, 
+  MinLength, 
+  IsOptional, 
+  IsArray 
+} from 'class-validator';
 
 export class CreateProductDto {
   @IsString()
@@ -7,7 +17,7 @@ export class CreateProductDto {
   readonly title: string;
 
   @IsNumber()
-  @Min(1, { message: 'Price must be greater than 0' })
+  @Min(0, { message: 'Price must be 0 or greater' })
   readonly price: number;
 
   @IsString()
@@ -15,5 +25,48 @@ export class CreateProductDto {
   readonly category: string;
 
   @IsUrl({}, { message: 'ImageUrl must be a valid URL' })
-  readonly imageUrl: string;
-}  
+  @IsOptional()
+  readonly imageUrl?: string;
+
+  @IsString()
+  @IsOptional()
+  readonly description?: string;
+
+  @IsString()
+  @IsOptional()
+  readonly brand?: string;
+
+  @IsNumber()
+  @Min(0)
+  @IsOptional()
+  readonly stock?: number;
+
+  @IsNumber()
+  @Min(1)
+  @Max(5)
+  @IsOptional()
+  readonly stars?: number;
+
+  @IsArray()
+  @IsString({ each: true })
+  @IsOptional()
+  readonly colors?: string[];
+
+  @IsArray()
+  @IsString({ each: true })
+  @IsOptional()
+  readonly sizes?: string[];
+
+  @IsArray()
+  @IsString({ each: true })
+  @IsOptional()
+  readonly tags?: string[];
+
+  @IsString()
+  @IsOptional()
+  readonly material?: string;
+
+  @IsNumber()
+  @IsOptional()
+  readonly weight?: number;
+}
