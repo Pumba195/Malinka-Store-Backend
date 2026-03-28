@@ -1,14 +1,29 @@
-import { 
-  IsString, 
-  IsNumber, 
-  Min, 
-  Max, 
-  IsUrl, 
-  IsNotEmpty, 
-  MinLength, 
-  IsOptional, 
-  IsArray 
+import {
+  IsString,
+  IsNumber,
+  Min,
+  Max,
+  IsUrl,
+  IsNotEmpty,
+  MinLength,
+  IsOptional,
+  IsArray,
+  ValidateNested
 } from 'class-validator';
+import { Type } from 'class-transformer';
+
+class ReviewDto {
+  @IsString()
+  user: string;
+
+  @IsNumber()
+  @Min(1)
+  @Max(5)
+  rating: number;
+
+  @IsString()
+  comment: string;
+}
 
 export class CreateProductDto {
   @IsString()
@@ -69,4 +84,10 @@ export class CreateProductDto {
   @IsNumber()
   @IsOptional()
   readonly weight?: number;
+
+  @IsArray()
+  @IsOptional()
+  @ValidateNested({ each: true })
+  @Type(() => ReviewDto)
+  readonly reviews?: ReviewDto[];
 }

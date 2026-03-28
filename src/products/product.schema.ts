@@ -1,6 +1,21 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
+@Schema()
+class Review {
+  @Prop({ required: true })
+  user: string;
+
+  @Prop({ required: true, min: 1, max: 5 })
+  rating: number;
+
+  @Prop({ required: true })
+  comment: string;
+
+  @Prop({ default: Date.now })
+  date: Date;
+}
+
 @Schema({ timestamps: true })
 export class Product extends Document {
   @Prop({ required: true, trim: true })
@@ -27,8 +42,8 @@ export class Product extends Document {
   @Prop({ default: 5, min: 1, max: 5 })
   stars: number;
 
-  @Prop([String])
-  reviews: string[];
+  @Prop([Review])
+  reviews: Review[];
 
   @Prop([String])
   colors: string[];
