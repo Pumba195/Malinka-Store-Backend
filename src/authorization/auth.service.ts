@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { ConflictException, Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
@@ -14,20 +14,21 @@ export class AuthService {
 
   // Registration
   async register(userData: any) {
+    const existingUser = await this.userModel.findOne({ email: userData.email });
 
-    const hashedPassword = await bcrypt.hash(userData.password, 10);
+    if (existingUser) {
+      throw new ConflictException('User with this email already exists.');
+    }
 
-    const newUser = new this.userModel({
-      ...userData,
-      password: hashedPassword,
-    });
-    
-    const savedUser = await newUser.save();
-
-    return this.login({ 
-      email: savedUser.email, 
-      password: userData.password
-    });
+    try {
+      const hashedPassword = await bcrypt.hash(userData.password, 10);
+      const newUser = new this.userModel({ ...userData, password: hashedPassword });
+      const savedUser = await newUser.save();
+      
+      return this.login({ email: savedUser.email, password: userData.password });
+    } catch (error) {
+      throw new InternalServerErrorException('Internal server error');
+    }
   }
 
   // Login
