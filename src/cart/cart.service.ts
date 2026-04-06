@@ -11,7 +11,7 @@ export class CartService {
         const user = await this.userModel.findById(userId);
         if (!user) throw new NotFoundException('User not found');
 
-        const itemIndex = user.cart.findIndex(item => item.productId === productId);
+        const itemIndex = user.cart.findIndex(item => item.productId.toString() === productId.toString());
 
         if (itemIndex > -1) {
             user.cart[itemIndex].quantity += quantity;
@@ -73,5 +73,30 @@ export class CartService {
         if (!user) throw new NotFoundException('User not found');
 
         return user.cart;
+    }
+
+    async toggleFavorite(userId: string, productId: string) {
+        const user = await this.userModel.findById(userId);
+        if (!user) throw new NotFoundException('User not found');
+
+        const index = user.favorites.indexOf(productId as any);
+
+        if (index > -1) {
+            user.favorites.splice(index, 1);
+        } else {
+            user.favorites.push(productId as any);
+        }
+
+        await user.save();
+        return user.favorites;
+    }
+
+    async getFavoritesWithData(userId: string) {
+        const user = await this.userModel
+            .findById(userId)
+            .populate('favorites')
+            .exec();
+
+        return user ? user.favorites : [];
     }
 }

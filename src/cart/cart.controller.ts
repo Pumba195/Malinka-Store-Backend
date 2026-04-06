@@ -33,4 +33,14 @@ export class CartController {
     const userId = req.user.sub;
     return this.cartService.updateQuantity(userId, data.productId, data.change);
   }
+
+  @Patch('favorites/toggle')
+  async toggleFavorite(@Req() req: any, @Body('productId') productId: string) {
+    return this.cartService.toggleFavorite(req.user.sub, productId);
+  }
+
+  @Get('favorites')
+  async getFavorites(@Req() req: any) {
+    return this.cartService.getFavoritesWithData(req.user.sub);
+  }
 }
