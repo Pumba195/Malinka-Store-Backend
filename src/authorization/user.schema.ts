@@ -14,10 +14,10 @@ export class User extends Document {
 
   @Prop({
     type: [{
-      productId: { 
-        type: MongooseSchema.Types.ObjectId, 
+      productId: {
+        type: MongooseSchema.Types.ObjectId,
         ref: 'Product',
-        required: true 
+        required: true
       },
       quantity: { type: Number, default: 1 }
     }],
@@ -25,9 +25,9 @@ export class User extends Document {
   })
   cart!: { productId: any; quantity: number }[];
 
-  @Prop({ 
-    type: [{ type: MongooseSchema.Types.ObjectId, ref: 'Product' }], 
-    default: [] 
+  @Prop({
+    type: [{ type: MongooseSchema.Types.ObjectId, ref: 'Product' }],
+    default: []
   })
   favorites!: any[];
 }

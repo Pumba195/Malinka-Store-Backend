@@ -10,7 +10,7 @@ export class AuthService {
   constructor(
     @InjectModel(User.name) private userModel: Model<User>,
     private jwtService: JwtService
-  ) {}
+  ) { }
 
   // Registration
   async register(userData: any) {
@@ -24,7 +24,7 @@ export class AuthService {
       const hashedPassword = await bcrypt.hash(userData.password, 10);
       const newUser = new this.userModel({ ...userData, password: hashedPassword });
       const savedUser = await newUser.save();
-      
+
       return this.login({ email: savedUser.email, password: userData.password });
     } catch (error) {
       throw new InternalServerErrorException('Internal server error');

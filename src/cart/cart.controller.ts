@@ -5,12 +5,12 @@ import { JwtAuthGuard } from '../authorization/jwt-auth.guard';
 @Controller('cart')
 @UseGuards(JwtAuthGuard)
 export class CartController {
-  constructor(private readonly cartService: CartService) {}
+  constructor(private readonly cartService: CartService) { }
 
   // POST http://localhost:3000/cart/add
   @Post('add')
   async addToCart(@Req() req: any, @Body() data: { productId: string; quantity?: number }) {
-    const userId = req.user.sub; 
+    const userId = req.user.sub;
     return this.cartService.addToCart(userId, data.productId, data.quantity);
   }
 
@@ -29,7 +29,7 @@ export class CartController {
   }
 
   @Patch('update-quantity')
-  async updateQuantity(@Req() req: any, @Body() data: { productId: string; change: number}) {
+  async updateQuantity(@Req() req: any, @Body() data: { productId: string; change: number }) {
     const userId = req.user.sub;
     return this.cartService.updateQuantity(userId, data.productId, data.change);
   }

@@ -13,7 +13,7 @@ import { User, UserSchema } from '../authorization/user.schema';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
-        secret: configService.get<string>('JWT_SECRET'), 
+        secret: configService.get<string>('JWT_SECRET'),
         signOptions: { expiresIn: '1d' },
       }),
     }),
@@ -21,4 +21,4 @@ import { User, UserSchema } from '../authorization/user.schema';
   controllers: [CartController],
   providers: [CartService],
 })
-export class CartModule {}
+export class CartModule { }
