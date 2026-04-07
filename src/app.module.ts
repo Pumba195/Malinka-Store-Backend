@@ -5,6 +5,7 @@ import { ProductsModule } from './products/products.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './authorization/auth.module';
+import { CartModule } from './cart/cart.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { AuthModule } from './authorization/auth.module';
     }),
     AuthModule,
     ProductsModule,
+    CartModule,
     MongooseModule.forRoot(process.env['MONGO_DB_LOGIN']!),
   ],
   controllers: [AppController],
