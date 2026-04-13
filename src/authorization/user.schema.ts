@@ -23,7 +23,11 @@ export class User extends Document {
     }],
     default: []
   })
-  cart!: { productId: any; quantity: number }[];
+  cart!: {
+    _id: MongooseSchema.Types.ObjectId;
+    productId: any;
+    quantity: number;
+  }[];
 
   @Prop({
     type: [{ type: MongooseSchema.Types.ObjectId, ref: 'Product' }],

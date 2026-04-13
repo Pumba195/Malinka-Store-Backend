@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Delete, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Delete, Body, Param, Query } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 
@@ -7,8 +7,13 @@ export class ProductsController {
     constructor(private readonly productsService: ProductsService) { }
 
     @Get()
-    getAllProducts() {
-        return this.productsService.findAll();
+    async getAll(
+        @Query('limit') limit: number,
+        @Query('offset') offset: number,
+        @Query('sort') sort: string,
+        @Query('search') search: string
+    ) {
+        return await this.productsService.findAll(limit, offset, sort, search);
     }
 
     @Post()
