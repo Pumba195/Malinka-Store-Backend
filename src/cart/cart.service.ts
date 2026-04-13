@@ -11,23 +11,32 @@ export class CartService {
         const user = await this.userModel.findById(userId);
         if (!user) throw new NotFoundException('User not found');
 
-        const itemIndex = user.cart.findIndex(item => item.productId.toString() === productId.toString());
+        const itemIndex = user.cart.findIndex(item =>
+            item.productId && item.productId.toString() === productId.toString()
+        );
 
         if (itemIndex > -1) {
             user.cart[itemIndex].quantity += quantity;
         } else {
-            user.cart.push({ productId, quantity });
+            user.cart.push({ productId, quantity } as any);
         }
 
         user.markModified('cart');
-        return await user.save();
+        await user.save();
+
+        const populatedUser = await this.userModel
+            .findById(userId)
+            .populate('cart.productId')
+            .exec();
+
+        return populatedUser!.cart;
     }
 
-    async removeFromCart(userId: string, productId: string) {
+    async removeFromCart(userId: string, cartItemId: string) {
         const user = await this.userModel.findById(userId);
         if (!user) throw new NotFoundException('User not found');
 
-        user.cart = user.cart.filter(item => item.productId.toString() !== productId);
+        user.cart = user.cart.filter(item => item._id.toString() !== cartItemId);
 
         await user.save();
 
@@ -43,7 +52,9 @@ export class CartService {
         const user = await this.userModel.findById(userId);
         if (!user) throw new NotFoundException('User not found');
 
-        const itemIndex = user.cart.findIndex(item => item.productId.toString() === productId);
+        const itemIndex = user.cart.findIndex(item =>
+            item.productId && item.productId.toString() === productId
+        );
 
         if (itemIndex > -1) {
             user.cart[itemIndex].quantity += change;
@@ -51,11 +62,12 @@ export class CartService {
             if (user.cart[itemIndex].quantity <= 0) {
                 user.cart.splice(itemIndex, 1);
             }
+
+            user.markModified('cart');
         }
 
         await user.save();
 
-        // Populate again to ensure frontend gets full product data
         const populatedUser = await this.userModel
             .findById(userId)
             .populate('cart.productId')
@@ -88,7 +100,9 @@ export class CartService {
         }
 
         await user.save();
-        return user.favorites;
+
+        const updatedUser = await this.userModel.findById(userId).populate('favorites');
+        return updatedUser ? updatedUser.favorites : [];
     }
 
     async getFavoritesWithData(userId: string) {
@@ -96,7 +110,7 @@ export class CartService {
             .findById(userId)
             .populate('favorites')
             .exec();
-
+        
         return user ? user.favorites : [];
     }
 }
