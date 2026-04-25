@@ -14,30 +14,30 @@ import { Type } from 'class-transformer';
 
 class ReviewDto {
   @IsString()
-  user: string;
+  user!: string;
 
   @IsNumber()
   @Min(1)
   @Max(5)
-  rating: number;
+  rating!: number;
 
   @IsString()
-  comment: string;
+  comment!: string;
 }
 
 export class CreateProductDto {
   @IsString()
   @IsNotEmpty({ message: 'Title cannot be empty' })
   @MinLength(3, { message: 'Title is too short' })
-  readonly title: string;
+  readonly title!: string;
 
   @IsNumber()
   @Min(0, { message: 'Price must be 0 or greater' })
-  readonly price: number;
+  readonly price!: number;
 
   @IsString()
   @IsNotEmpty({ message: 'Category is required' })
-  readonly category: string;
+  readonly category!: string;
 
   @IsUrl({}, { message: 'ImageUrl must be a valid URL' })
   @IsOptional()

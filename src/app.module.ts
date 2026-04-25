@@ -11,7 +11,6 @@ import { CartModule } from './cart/cart.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: '.env',
     }),
     AuthModule,
     ProductsModule,
