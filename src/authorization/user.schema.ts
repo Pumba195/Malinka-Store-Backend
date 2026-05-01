@@ -34,6 +34,12 @@ export class User extends Document {
     default: []
   })
   favorites!: any[];
+
+  @Prop({ required: false })
+  verificationCode!: string;
+  
+  @Prop({ default: false })
+  isVerified!: boolean;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

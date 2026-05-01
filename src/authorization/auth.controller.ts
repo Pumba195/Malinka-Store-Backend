@@ -10,6 +10,21 @@ export class AuthController {
     return this.authService.register(userData);
   }
 
+  @Post('verify')
+  async verify(@Body() body: { email: string; code: string }) {
+    return this.authService.verifyEmail(body.email, body.code);
+  }
+
+  @Post('resend-code')
+  async resendCode(@Body('email') email: string) {
+    return this.authService.resendVerificationCode(email);
+  }
+
+  @Post('check-status')
+  async checkStatus(@Body('email') email: string) {
+    return this.authService.checkUserStatus(email);
+  }
+
   @Post('login')
   async login(@Body() credentials: any) {
     return this.authService.login(credentials);
