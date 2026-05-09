@@ -231,6 +231,11 @@ export class AuthService {
       throw new BadRequestException('Invalid current password');
     }
 
+    const isSamePassword = await bcrypt.compare(newPassword, user.password);
+    if (isSamePassword) {
+      throw new BadRequestException('New password cannot be the same as the current one');
+    }
+
     user.password = await bcrypt.hash(newPassword, 10);
     await user.save();
 
@@ -260,6 +265,11 @@ export class AuthService {
 
     if (user.verificationCode !== code) {
       throw new BadRequestException('Invalid verification code');
+    }
+
+    const isSamePassword = await bcrypt.compare(newPassword, user.password);
+    if (isSamePassword) {
+      throw new BadRequestException('New password cannot be the same as the current one');
     }
 
     user.password = await bcrypt.hash(newPassword, 10);
