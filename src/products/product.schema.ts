@@ -4,64 +4,64 @@ import { Document } from 'mongoose';
 @Schema()
 class Review {
   @Prop({ required: true })
-  user: string;
+  user!: string;
 
   @Prop({ required: true, min: 1, max: 5 })
-  rating: number;
+  rating!: number;
 
   @Prop({ required: true })
-  comment: string;
+  comment!: string;
 
   @Prop({ default: Date.now })
-  date: Date;
+  date!: Date;
 }
 
 @Schema({ timestamps: true })
 export class Product extends Document {
   @Prop({ required: true, trim: true })
-  title: string;
+  title!: string;
 
   @Prop({ required: true, min: 0 })
-  price: number;
+  price!: number;
 
   @Prop({ index: true })
-  category: string;
+  category!: string;
 
   @Prop({ default: 'assets/no-image.png' })
-  imageUrl: string;
+  imageUrl!: string;
 
   @Prop()
-  description: string;
+  description!: string;
 
   @Prop()
-  brand: string;
+  brand!: string;
 
   @Prop({ default: 0, min: 0 })
-  stock: number;
+  stock!: number;
 
   @Prop({ default: 5, min: 1, max: 5 })
-  stars: number;
+  stars!: number;
 
   @Prop([Review])
-  reviews: Review[];
+  reviews!: Review[];
 
   @Prop([String])
-  colors: string[];
+  colors!: string[];
 
   @Prop([String])
-  sizes: string[];
+  sizes!: string[];
 
   @Prop()
-  weight: number;
+  weight!: number;
 
   @Prop()
-  dimensions: string;
+  dimensions!: string;
 
   @Prop()
-  material: string;
+  material!: string;
 
   @Prop({ type: [String], index: true })
-  tags: string[];
+  tags!: string[];
 }
 
 export const ProductSchema = SchemaFactory.createForClass(Product);
